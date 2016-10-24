@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "735732131227",
+    "firebase_url": "https://abtesting-93bf9.firebaseio.com",
+    "project_id": "abtesting-93bf9",
+    "storage_bucket": "abtesting-93bf9.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:735732131227:android:d12c342b7fabf9a1",
+        "android_client_info": {
+          "package_name": "vn.tiki.ab.sample"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "735732131227-dctd5v4f16qkh4iiksa5jctdcqmqd33i.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDyZH15VUXlXxMVakalHj5M3JqJMZbAZPY"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
