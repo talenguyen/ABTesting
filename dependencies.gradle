@@ -6,8 +6,8 @@ ext {
   ci = 'true'.equals(System.getenv('CI'))
 
   abtesting = project(':abtesting')
-  appCompatV7 = 'com.android.support:appcompat-v7:24.2.1'
-  supportAnnotations = 'com.android.support:support-annotations:24.2.1'
+  appCompatV7 = 'com.android.support:appcompat-v7:25.0.0'
+  supportAnnotations = 'com.android.support:support-annotations:25.0.0'
   rxJava = 'io.reactivex:rxjava:1.2.0'
   remoteConfig="com.google.firebase:firebase-config:9.6.1"
 
