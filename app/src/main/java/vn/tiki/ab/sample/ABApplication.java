@@ -1,10 +1,13 @@
 package vn.tiki.ab.sample;
 
 import android.app.Application;
-
+import android.content.Context;
+import android.support.annotation.NonNull;
+import android.support.v4.util.ArrayMap;
 import com.google.firebase.FirebaseApp;
-import com.google.firebase.remoteconfig.FirebaseRemoteConfig;
-import com.google.firebase.remoteconfig.FirebaseRemoteConfigSettings;
+import java.util.concurrent.TimeUnit;
+import vn.tiki.ab.Ab;
+import vn.tiki.ab.AbSettings;
 
 /**
  * Created by KenZira on 10/23/16.
@@ -12,15 +15,31 @@ import com.google.firebase.remoteconfig.FirebaseRemoteConfigSettings;
 
 public class ABApplication extends Application {
 
-    @Override
-    public void onCreate() {
-        super.onCreate();
+  private Ab ab;
 
-        FirebaseApp.initializeApp(this);
+  public static ABApplication get(Context context) {
+    return (ABApplication) context.getApplicationContext();
+  }
 
-        FirebaseRemoteConfigSettings config = new FirebaseRemoteConfigSettings.Builder()
-                .setDeveloperModeEnabled(BuildConfig.DEBUG)
-                .build();
-        FirebaseRemoteConfig.getInstance().setConfigSettings(config);
-    }
+  @Override public void onCreate() {
+    super.onCreate();
+
+    FirebaseApp.initializeApp(this);
+
+    ab = new Ab(new AbSettings.Builder()
+        .debug(BuildConfig.DEBUG)
+        .cacheExpiration(2, TimeUnit.SECONDS)
+        .defaults(defaultAbValues())
+        .build());
+  }
+
+  @NonNull private ArrayMap<String, Object> defaultAbValues() {
+    final ArrayMap<String, Object> map = new ArrayMap<>();
+    map.put("onboard_navigation", "Home");
+    return map;
+  }
+
+  public Ab getAb() {
+    return ab;
+  }
 }
