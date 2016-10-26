@@ -1,78 +1,13 @@
-# NoAdapter
+# ABTesting
 
-[![Build Status](https://travis-ci.org/tikivn/NoAdapter.svg?branch=master)](https://travis-ci.org/tikivn/NoAdapter)
+[![Build Status](https://travis-ci.org/dbof10/ABTesting.svg?branch=master)](https://travis-ci.org/dbof10/ABTesting)
 
 Too much boilerplate and effort to implement a list using RecyclerView. But, most of them can be omitted. This library will take care of the heavy part and leave you the easy part.
 
 ![](logo.png)
 
 ## Sample Usage
-  * `Data Binding`: *We take advantage of `Data Binding` to avoid to implement ViewHolder then `Data Binding` is required*.
-    
-    ```gradle
-    android {
-      dataBinding {
-        enabled true
-      }
-    }
-    ```
-  * Layout
-    
-    ```xml
-    <?xml version="1.0" encoding="utf-8"?>
-    <layout xmlns:android="http://schemas.android.com/apk/res/android">
-    
-      <data>
-    
-        <variable
-          name="onClick"
-          type="android.view.View.OnClickListener"/>
-    
-        <variable
-          name="item"
-          type="vn.tiki.noadapter.sample.entity.User"/>
-    
-      </data>
-    
-      <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@{item.name}"
-        android:onClick="@{onClick}"
-        />
-    
-    </layout>
-    ```
-    
-    * `item`: - data for binding
-    * `onClick`: - set for views which you want to handle `OnClickListener`       
-         
-  * Build Adapter
-    
-    ```java
-    adapter = new OnlyAdapter.Builder()
-            .layoutSelector(new LayoutSelector() {
-              @Override public int layoutForType(int type) {
-                return R.layout.item;
-              }
-            })
-            .onItemClickListener(new OnItemClickListener() {
-              @Override public void onItemClick(View view, Object item, int position) {
-                switch(view.getId()) {
-                  case R.id.text1:
-                    Log.d(TAG, "text1 is clicked");
-                    break;
-                  case R.id.text2:
-                    Log.d(TAG, "text2 is clicked");
-                    break;
-                }
-              }
-            })
-            .build();
-    recyclerView.setAdapter(adapter);
-    ```
-   
-See more in the sample
+  
 
 ## Download
 
