@@ -4,7 +4,7 @@
 
 Solution to Remote config Firebase in reactive way
 
-![](logo.png)
+![](assets/logo.png)
 
 ## Sample Usage
  
