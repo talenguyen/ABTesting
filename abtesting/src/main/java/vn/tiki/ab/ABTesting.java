@@ -7,12 +7,12 @@ import com.google.firebase.remoteconfig.FirebaseRemoteConfigSettings;
  * Created by Giang Nguyen on 10/24/16.
  */
 
-public class Ab {
+public class ABTesting {
 
   private final FirebaseRemoteConfig firebaseRemoteConfig;
   private final long cacheExpiration;
 
-  public Ab(AbSettings settings) {
+  public ABTesting(AbSettings settings) {
     this.firebaseRemoteConfig = FirebaseRemoteConfig.getInstance();
 
     final FirebaseRemoteConfigSettings remoteConfigSettings =

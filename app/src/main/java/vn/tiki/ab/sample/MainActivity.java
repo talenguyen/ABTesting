@@ -7,7 +7,7 @@ import android.util.Log;
 import android.view.View;
 import java.util.concurrent.TimeUnit;
 import rx.functions.Action1;
-import vn.tiki.ab.Ab;
+import vn.tiki.ab.ABTesting;
 
 /**
  * Created by KenZira on 10/21/16.
@@ -16,7 +16,7 @@ import vn.tiki.ab.Ab;
 public class MainActivity extends AppCompatActivity {
 
   private static final String TAG = "MainActivity";
-  private Ab ab;
+  private ABTesting ab;
 
   @Override protected void onCreate(@Nullable Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);

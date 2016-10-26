@@ -6,7 +6,7 @@ import android.support.annotation.NonNull;
 import android.support.v4.util.ArrayMap;
 import com.google.firebase.FirebaseApp;
 import java.util.concurrent.TimeUnit;
-import vn.tiki.ab.Ab;
+import vn.tiki.ab.ABTesting;
 import vn.tiki.ab.AbSettings;
 
 /**
@@ -15,7 +15,7 @@ import vn.tiki.ab.AbSettings;
 
 public class ABApplication extends Application {
 
-  private Ab ab;
+  private ABTesting ab;
 
   public static ABApplication get(Context context) {
     return (ABApplication) context.getApplicationContext();
@@ -26,7 +26,7 @@ public class ABApplication extends Application {
 
     FirebaseApp.initializeApp(this);
 
-    ab = new Ab(new AbSettings.Builder()
+    ab = new ABTesting(new AbSettings.Builder()
         .debug(BuildConfig.DEBUG)
         .cacheExpiration(2, TimeUnit.SECONDS)
         .defaults(defaultAbValues())
@@ -39,7 +39,7 @@ public class ABApplication extends Application {
     return map;
   }
 
-  public Ab getAb() {
+  public ABTesting getAb() {
     return ab;
   }
 }
