@@ -18,6 +18,7 @@ import rx.functions.Func1;
  */
 
 public class ValueRequest {
+
   private final FirebaseRemoteConfig remoteConfig;
   private final String key;
   private final long timeout;
@@ -28,6 +29,14 @@ public class ValueRequest {
     this.cacheExpiration = cacheExpiration;
     this.key = key;
     this.timeout = timeout;
+  }
+
+  public <T> Observable<T> parseValue(final ValueParser<T> valueParser) {
+    return getValue().map(new Func1<FirebaseRemoteConfigValue, T>() {
+      @Override public T call(FirebaseRemoteConfigValue remoteConfigValue) {
+        return valueParser.parse(remoteConfigValue.asString());
+      }
+    });
   }
 
   public Observable<String> stringValue() {
