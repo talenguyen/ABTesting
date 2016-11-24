@@ -8,6 +8,7 @@ import android.view.View;
 import java.util.concurrent.TimeUnit;
 import rx.functions.Action1;
 import vn.tiki.ab.AbTesting;
+import vn.tiki.ab.Parser;
 
 /**
  * Created by KenZira on 10/21/16.
@@ -30,12 +31,12 @@ public class MainActivity extends AppCompatActivity {
         .key("onboard_navigation")
         .timeout(5, TimeUnit.SECONDS)
         .build()
-        .stringValue()
-        .retry(3)
-        .subscribe(new Action1<String>() {
-          @Override public void call(String s) {
-            Log.d(TAG, "call: " + s);
+        .parseValue(Parser.BOOLEAN)
+        .subscribe(new Action1<Boolean>() {
+          @Override public void call(Boolean value) {
+            Log.d(TAG, "call: " + value);
           }
         });
+
   }
 }

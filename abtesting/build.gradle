@@ -41,8 +41,6 @@ android {
 
 dependencies {
   compile fileTree(dir: 'libs', include: ['*.jar'])
-  compile rootProject.ext.supportAnnotations
-  compile rootProject.ext.appCompatV7
   compile rootProject.ext.rxJava
   compile rootProject.ext.remoteConfig
 
