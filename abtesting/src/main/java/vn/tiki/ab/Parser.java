@@ -6,6 +6,9 @@ package vn.tiki.ab;
 
 public class Parser {
 
+  private Parser() {
+  }
+
   public static final ValueParser<Boolean> BOOLEAN = new ValueParser<Boolean>() {
     @Override public Boolean parse(String value) {
       return Boolean.valueOf(value);
