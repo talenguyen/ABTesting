@@ -1,5 +1,6 @@
 package vn.tiki.ab;
 
+import android.app.Activity;
 import android.support.annotation.NonNull;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -7,6 +8,7 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig;
 import com.google.firebase.remoteconfig.FirebaseRemoteConfigValue;
+import java.lang.ref.WeakReference;
 import java.util.concurrent.TimeUnit;
 import rx.AsyncEmitter;
 import rx.Observable;
@@ -23,8 +25,11 @@ public class ValueRequest {
   private final String key;
   private final long timeout;
   private final long cacheExpiration;
+  private final WeakReference<Activity> activityWeakReference;
 
-  ValueRequest(FirebaseRemoteConfig remoteConfig, long cacheExpiration, String key, long timeout) {
+  ValueRequest(@NonNull Activity activity, FirebaseRemoteConfig remoteConfig, long cacheExpiration,
+      String key, long timeout) {
+    activityWeakReference = new WeakReference<>(activity);
     this.remoteConfig = remoteConfig;
     this.cacheExpiration = cacheExpiration;
     this.key = key;
@@ -57,39 +62,31 @@ public class ValueRequest {
 
   private Observable<FirebaseRemoteConfigValue> getValue() {
     return Observable.fromEmitter(new Action1<AsyncEmitter<FirebaseRemoteConfigValue>>() {
-      private boolean canceled;
 
       @Override public void call(final AsyncEmitter<FirebaseRemoteConfigValue> asyncEmitter) {
-        remoteConfig.fetch(cacheExpiration).addOnFailureListener(new OnFailureListener() {
+        final Activity activity = activityWeakReference.get();
+        if (activity == null) {
+          return;
+        }
+        remoteConfig.fetch(cacheExpiration).addOnFailureListener(activity, new OnFailureListener() {
           @Override public void onFailure(@NonNull Exception e) {
-            if (canceled) {
-              canceled = false;
-              return;
-            }
             asyncEmitter.onError(e);
           }
-        }).addOnSuccessListener(new OnSuccessListener<Void>() {
+        }).addOnSuccessListener(activity, new OnSuccessListener<Void>() {
           @Override public void onSuccess(Void aVoid) {
-            if (canceled) {
-              canceled = false;
-              return;
-            }
             remoteConfig.activateFetched();
             asyncEmitter.onNext(remoteConfig.getValue(key));
           }
-        }).addOnCompleteListener(new OnCompleteListener<Void>() {
-          @Override public void onComplete(@NonNull Task<Void> task) {
-            if (canceled) {
-              canceled = false;
-              return;
-            }
-            asyncEmitter.onCompleted();
-          }
-        });
+        }).addOnCompleteListener(
+            activity, new OnCompleteListener<Void>() {
+              @Override public void onComplete(@NonNull Task<Void> task) {
+                asyncEmitter.onCompleted();
+              }
+            });
 
         asyncEmitter.setCancellation(new AsyncEmitter.Cancellable() {
           @Override public void cancel() throws Exception {
-            canceled = true;
+            activityWeakReference.clear();
           }
         });
       }

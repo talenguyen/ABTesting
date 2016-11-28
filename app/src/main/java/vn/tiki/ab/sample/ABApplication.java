@@ -3,11 +3,13 @@ package vn.tiki.ab.sample;
 import android.app.Application;
 import android.content.Context;
 import android.support.annotation.NonNull;
+import android.support.multidex.MultiDex;
 import android.support.v4.util.ArrayMap;
 import com.google.firebase.FirebaseApp;
+import com.squareup.leakcanary.LeakCanary;
 import java.util.concurrent.TimeUnit;
-import vn.tiki.ab.AbTesting;
 import vn.tiki.ab.AbSettings;
+import vn.tiki.ab.AbTesting;
 
 /**
  * Created by KenZira on 10/23/16.
@@ -24,6 +26,10 @@ public class ABApplication extends Application {
   @Override public void onCreate() {
     super.onCreate();
 
+    if (!LeakCanary.isInAnalyzerProcess(this)) {
+      LeakCanary.install(this);
+    }
+
     FirebaseApp.initializeApp(this);
 
     ab = new AbTesting(new AbSettings.Builder()
@@ -31,6 +37,12 @@ public class ABApplication extends Application {
         .cacheExpiration(2, TimeUnit.SECONDS)
         .defaults(defaultAbValues())
         .build());
+  }
+
+  @Override
+  protected void attachBaseContext(Context base) {
+    super.attachBaseContext(base);
+    MultiDex.install(this);
   }
 
   @NonNull private ArrayMap<String, Object> defaultAbValues() {

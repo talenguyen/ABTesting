@@ -1,5 +1,7 @@
 package vn.tiki.ab;
 
+import android.app.Activity;
+import android.support.annotation.NonNull;
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig;
 import com.google.firebase.remoteconfig.FirebaseRemoteConfigSettings;
 
@@ -24,7 +26,7 @@ public class AbTesting {
     cacheExpiration = settings.cacheExpiration();
   }
 
-  public RequestBuilder request() {
-    return new RequestBuilder(firebaseRemoteConfig, cacheExpiration);
+  public RequestBuilder request(@NonNull Activity activity) {
+    return new RequestBuilder(firebaseRemoteConfig, cacheExpiration, activity);
   }
 }
