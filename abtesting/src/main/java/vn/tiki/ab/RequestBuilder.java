@@ -16,14 +16,18 @@ public class RequestBuilder {
   private final long cacheExpiration;
   private Activity activity;
 
-  RequestBuilder(@NonNull FirebaseRemoteConfig remoteConfig, long cacheExpiration, Activity activity) {
+  RequestBuilder(@NonNull FirebaseRemoteConfig remoteConfig, long cacheExpiration) {
     this.remoteConfig = remoteConfig;
     this.cacheExpiration = cacheExpiration;
-    this.activity = activity;
   }
 
   public RequestBuilder key(String key) {
     this.key = key;
+    return this;
+  }
+
+  public RequestBuilder bindLifeCycleTo(Activity activity){
+    this.activity = activity;
     return this;
   }
 
@@ -35,4 +39,5 @@ public class RequestBuilder {
   public ValueRequest build() {
     return new ValueRequest(activity, remoteConfig, cacheExpiration, key, timeout);
   }
+
 }

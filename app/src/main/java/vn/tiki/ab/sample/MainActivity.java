@@ -30,9 +30,10 @@ public class MainActivity extends AppCompatActivity {
 
   @Override protected void onResume() {
     super.onResume();
-    subscription = ab.request(this)
+    subscription = ab.request()
         .key("onboard_navigation")
         .timeout(5, TimeUnit.SECONDS)
+        .bindLifeCycleTo(this)
         .build()
         .parseValue(Parser.BOOLEAN)
         .subscribe(new Action1<Boolean>() {
