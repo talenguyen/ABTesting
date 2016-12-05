@@ -66,41 +66,22 @@ public class ValueRequest {
 
       @Override public void call(final AsyncEmitter<FirebaseRemoteConfigValue> asyncEmitter) {
         final Activity activity = activityWeakReference.get();
-        if (activity == null) {
-
-          remoteConfig.fetch(cacheExpiration).addOnFailureListener(new OnFailureListener() {
-            @Override public void onFailure(@NonNull Exception e) {
-              asyncEmitter.onError(e);
-            }
-          }).addOnSuccessListener(new OnSuccessListener<Void>() {
-            @Override public void onSuccess(Void aVoid) {
-              remoteConfig.activateFetched();
-              asyncEmitter.onNext(remoteConfig.getValue(key));
-            }
-          }).addOnCompleteListener(new OnCompleteListener<Void>() {
-            @Override public void onComplete(@NonNull Task<Void> task) {
-              asyncEmitter.onCompleted();
-            }
-          });
-        } else {
-
-          remoteConfig.fetch(cacheExpiration).addOnFailureListener(
-              activity, new OnFailureListener() {
-                @Override public void onFailure(@NonNull Exception e) {
-                  asyncEmitter.onError(e);
-                }
-              }).addOnSuccessListener(activity, new OnSuccessListener<Void>() {
-            @Override public void onSuccess(Void aVoid) {
-              remoteConfig.activateFetched();
-              asyncEmitter.onNext(remoteConfig.getValue(key));
-            }
-          }).addOnCompleteListener(
-              activity, new OnCompleteListener<Void>() {
-                @Override public void onComplete(@NonNull Task<Void> task) {
-                  asyncEmitter.onCompleted();
-                }
-              });
-        }
+        remoteConfig.fetch(cacheExpiration).addOnFailureListener(
+            activity, new OnFailureListener() {
+              @Override public void onFailure(@NonNull Exception e) {
+                asyncEmitter.onError(e);
+              }
+            }).addOnSuccessListener(activity, new OnSuccessListener<Void>() {
+          @Override public void onSuccess(Void aVoid) {
+            remoteConfig.activateFetched();
+            asyncEmitter.onNext(remoteConfig.getValue(key));
+          }
+        }).addOnCompleteListener(
+            activity, new OnCompleteListener<Void>() {
+              @Override public void onComplete(@NonNull Task<Void> task) {
+                asyncEmitter.onCompleted();
+              }
+            });
 
         asyncEmitter.setCancellation(new AsyncEmitter.Cancellable() {
           @Override public void cancel() throws Exception {

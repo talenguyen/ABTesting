@@ -26,7 +26,9 @@ public class AbTesting {
     cacheExpiration = settings.cacheExpiration();
   }
 
-  public RequestBuilder request() {
-    return new RequestBuilder(firebaseRemoteConfig, cacheExpiration);
+
+
+  public RequestBuilder request(@NonNull Activity activity) {
+    return new RequestBuilder(firebaseRemoteConfig, activity, cacheExpiration);
   }
 }
