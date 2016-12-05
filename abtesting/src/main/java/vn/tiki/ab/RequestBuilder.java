@@ -16,7 +16,8 @@ public class RequestBuilder {
   private final long cacheExpiration;
   private Activity activity;
 
-  RequestBuilder(@NonNull FirebaseRemoteConfig remoteConfig, @NonNull Activity activity, long cacheExpiration) {
+  RequestBuilder(@NonNull FirebaseRemoteConfig remoteConfig, @NonNull Activity activity,
+      long cacheExpiration) {
     this.remoteConfig = remoteConfig;
     this.cacheExpiration = cacheExpiration;
     this.activity = activity;
