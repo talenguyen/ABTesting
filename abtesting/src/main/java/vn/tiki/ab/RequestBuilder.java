@@ -1,5 +1,7 @@
 package vn.tiki.ab;
 
+import android.app.Activity;
+import android.support.annotation.NonNull;
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig;
 import java.util.concurrent.TimeUnit;
 
@@ -12,10 +14,13 @@ public class RequestBuilder {
   private long timeout;
   private final FirebaseRemoteConfig remoteConfig;
   private final long cacheExpiration;
+  private Activity activity;
 
-  RequestBuilder(FirebaseRemoteConfig remoteConfig, long cacheExpiration) {
+  RequestBuilder(@NonNull FirebaseRemoteConfig remoteConfig, @NonNull Activity activity,
+      long cacheExpiration) {
     this.remoteConfig = remoteConfig;
     this.cacheExpiration = cacheExpiration;
+    this.activity = activity;
   }
 
   public RequestBuilder key(String key) {
@@ -29,6 +34,7 @@ public class RequestBuilder {
   }
 
   public ValueRequest build() {
-    return new ValueRequest(remoteConfig, cacheExpiration, key, timeout);
+    return new ValueRequest(activity, remoteConfig, cacheExpiration, key, timeout);
   }
+
 }
