@@ -30,7 +30,7 @@ public class MainActivity extends AppCompatActivity {
 
   public void fetch(View view) {
     ABApplication.get(this).getAb()
-        .request()
+        .request(this)
         .key("onboard_navigation")
         .timeout(5, TimeUnit.SECONDS)
         .build()
@@ -50,14 +50,14 @@ public class MainActivity extends AppCompatActivity {
 
 Download [the latest JAR][1] or grab via Gradle:
 ```groovy
-compile 'vn.tiki.ab:abtesting:1.0.0-SNAPSHOT'
+compile 'vn.tiki.ab:abtesting:1.0.2-SNAPSHOT'
 ```
 or Maven:
 ```xml
 <dependency>
   <groupId>vn.tiki.ab</groupId>
   <artifactId>abtesting</artifactId>
-  <version>1.0.0-SNAPSHOT</version>
+  <version>1.0.2-SNAPSHOT</version>
 </dependency>
 ```
 
