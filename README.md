@@ -34,16 +34,42 @@ public class MainActivity extends AppCompatActivity {
         .key("onboard_navigation")
         .timeout(5, TimeUnit.SECONDS)
         .build()
-        .stringValue()
+        .parseValue(Parser.BOOLEAN)
         .retry(3)
-        .subscribe(new Action1<String>() {
-          @Override public void call(String s) {
-            Log.d(TAG, "call: " + s);
+        .subscribe(new Action1<Boolean>() {
+          @Override public void call(Boolean value) {
+            if (value) {
+              startActivity(new Intent(MainActivity.this, OnboardActivity.class));
+            } else {
+              startActivity(new Intent(MainActivity.this, HomeActivity.class));
+            }
+            finish();
           }
         });
   }
 
  ```
+ 
+ Support primitive types
+ 
+ ```
+ Parser.BOOLEAN
+ Parser.LONG
+ Parser.DOUBLE
+ Parser.FLOAT
+ Parser.BYTE
+ Parser.INTEGER
+ ```
+ 
+ if ``String`` 
+ 
+ use ``.stringValue()`` instead of ``parseValue()``
+ 
+ 
+ 
+## Avoid memory leak
+ 
+ Memory leak is detected in ``FirebaseRemoteConfig`` so it's mandatory to pass your ``Activity`` as parameter in ``request`` method
   
 
 ## Download
