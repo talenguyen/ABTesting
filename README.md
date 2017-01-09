@@ -1,6 +1,6 @@
 # ABTesting
 
-[![Build Status](https://travis-ci.org/dbof10/ABTesting.svg?branch=master)](https://travis-ci.org/dbof10/ABTesting)
+[![Build Status](https://travis-ci.org/tikivn/AutoCompleteEmail.svg?branch=master)](https://travis-ci.org/tikivn/AutoCompleteEmail)
 
 Solution to Remote config Firebase in reactive way
 
