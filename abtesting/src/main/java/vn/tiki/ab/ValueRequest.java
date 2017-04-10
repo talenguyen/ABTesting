@@ -11,9 +11,10 @@ import com.google.firebase.remoteconfig.FirebaseRemoteConfig;
 import com.google.firebase.remoteconfig.FirebaseRemoteConfigValue;
 import java.lang.ref.WeakReference;
 import java.util.concurrent.TimeUnit;
-import rx.AsyncEmitter;
+import rx.Emitter;
 import rx.Observable;
 import rx.functions.Action1;
+import rx.functions.Cancellable;
 import rx.functions.Func1;
 
 /**
@@ -62,39 +63,55 @@ public class ValueRequest {
   }
 
   private Observable<FirebaseRemoteConfigValue> getValue() {
-    return Observable.fromEmitter(new Action1<AsyncEmitter<FirebaseRemoteConfigValue>>() {
-
-      @Override public void call(final AsyncEmitter<FirebaseRemoteConfigValue> asyncEmitter) {
-        final Activity activity = activityWeakReference.get();
-        remoteConfig.fetch(cacheExpiration).addOnFailureListener(
-            activity, new OnFailureListener() {
+    return Observable
+        .create(new Action1<Emitter<FirebaseRemoteConfigValue>>() {
+          @Override
+          public void call(final Emitter<FirebaseRemoteConfigValue> asyncEmitter) {
+            final OnFailureListener onFailureListener = new OnFailureListener() {
               @Override public void onFailure(@NonNull Exception e) {
                 asyncEmitter.onError(e);
               }
-            }).addOnSuccessListener(activity, new OnSuccessListener<Void>() {
-          @Override public void onSuccess(Void aVoid) {
-            remoteConfig.activateFetched();
-            asyncEmitter.onNext(remoteConfig.getValue(key));
-          }
-        }).addOnCompleteListener(
-            activity, new OnCompleteListener<Void>() {
+            };
+            final OnSuccessListener<Void> onSuccessListener = new OnSuccessListener<Void>() {
+              @Override public void onSuccess(Void aVoid) {
+                remoteConfig.activateFetched();
+                asyncEmitter.onNext(remoteConfig.getValue(key));
+              }
+            };
+            final OnCompleteListener<Void> onCompleteListener = new OnCompleteListener<Void>() {
               @Override public void onComplete(@NonNull Task<Void> task) {
                 asyncEmitter.onCompleted();
               }
-            });
+            };
 
-        asyncEmitter.setCancellation(new AsyncEmitter.Cancellable() {
-          @Override public void cancel() throws Exception {
-            activityWeakReference.clear();
+            final Task<Void> fetch = remoteConfig.fetch(cacheExpiration);
+            final Activity activity = activityWeakReference.get();
+            if (activity == null) {
+              fetch
+                  .addOnFailureListener(onFailureListener)
+                  .addOnSuccessListener(onSuccessListener)
+                  .addOnCompleteListener(onCompleteListener);
+            } else {
+              fetch
+                  .addOnFailureListener(activity, onFailureListener)
+                  .addOnSuccessListener(activity, onSuccessListener)
+                  .addOnCompleteListener(activity, onCompleteListener);
+
+              asyncEmitter
+                  .setCancellation(new Cancellable() {
+                    @Override public void cancel() throws Exception {
+                      activityWeakReference.clear();
+                    }
+                  });
+            }
           }
-        });
-      }
-    }, AsyncEmitter.BackpressureMode.BUFFER)
+        }, Emitter.BackpressureMode.BUFFER)
         .timeout(timeout, TimeUnit.MILLISECONDS)
         .onErrorResumeNext(new Func1<Throwable, Observable<? extends FirebaseRemoteConfigValue>>() {
           @Override
           public Observable<? extends FirebaseRemoteConfigValue> call(Throwable throwable) {
-            return Observable.just(remoteConfig.getValue(key));
+            return Observable
+                .just(remoteConfig.getValue(key));
           }
         });
   }

@@ -76,14 +76,14 @@ public class MainActivity extends AppCompatActivity {
 
 Download [the latest JAR][1] or grab via Gradle:
 ```groovy
-compile 'vn.tiki.ab:abtesting:1.0.2-SNAPSHOT'
+compile 'vn.tiki.ab:abtesting:1.0.3-SNAPSHOT'
 ```
 or Maven:
 ```xml
 <dependency>
   <groupId>vn.tiki.ab</groupId>
   <artifactId>abtesting</artifactId>
-  <version>1.0.2-SNAPSHOT</version>
+  <version>1.0.3-SNAPSHOT</version>
 </dependency>
 ```
 
